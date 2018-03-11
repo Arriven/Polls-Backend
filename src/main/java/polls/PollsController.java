@@ -11,9 +11,9 @@ public class PollsController {
 
 	public PollsController() {
 		Question q = new Question("test question");
-		q.AddAnswer("a");
-		q.AddAnswer("b");
-		poll.AddQuestion(q);
+		q.addAnswer("a");
+		q.addAnswer("b");
+		poll.addQuestion(q);
 	}
 
 	@RequestMapping("/getPoll")

@@ -12,7 +12,7 @@ public class Question {
 		this.text = text;
 	}
 
-	public void AddAnswer(String answer) {
+	public void addAnswer(String answer) {
 		answers.put(counter++, answer);
 	}
 
