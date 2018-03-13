@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class PollsController {
 
-	private Poll poll = new Poll();
+	private Poll poll = new Poll("test poll");
 
 	public PollsController() {
 		Question q = new Question("test question");
-		q.addAnswer("a");
-		q.addAnswer("b");
+		q.addAnswer(new Answer("a"));
+		q.addAnswer(new Answer("b"));
 		poll.addQuestion(q);
 	}
 
