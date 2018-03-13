@@ -19,11 +19,11 @@ public class Poll {
 		questions.add(q);
 	}
 
-	public List<Question> getQuestions() {
-		return questions;
-	}
-
 	public long getId() {
 		return id;
+	}
+
+	public List<Question> getQuestions() {
+		return questions;
 	}
 }
