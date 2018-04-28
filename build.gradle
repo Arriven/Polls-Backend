@@ -1,11 +1,3 @@
-task stage {
-	dependsOn build
-}
-
-task wrapper(type: Wrapper) {
-	gradleVersion = '4.0'
-}
-
 buildscript {
 	repositories {
 		mavenCentral()
