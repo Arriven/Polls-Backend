@@ -1,5 +1,8 @@
 package polls;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +19,23 @@ public class PollsController {
 		poll.addQuestion(q);
 	}
 
+	@RequestMapping("/getPollsList")
+	public List getPollsListHandler() {
+		return new ArrayList<String>();
+	}
+
 	@RequestMapping("/getPoll")
 	public Poll getPollHandler() {
+		return poll;
+	}
+
+	@RequestMapping("/getMyPollsList")
+	public List getMyPollsListHandler() {
+		return new ArrayList<String>();
+	}
+
+	@RequestMapping("/getPollWithStats")
+	public Poll getPollWithStatsHandler() {
 		return poll;
 	}
 }
