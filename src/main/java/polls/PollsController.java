@@ -61,7 +61,7 @@ public class PollsController {
 			return null;
 		}
 		Poll poll = optPoll.get();
-		if (poll.getAuthor() != auth.getName())
+		if (!poll.getAuthor().equals(auth.getName()))
 		{
 			return null;
 		}
