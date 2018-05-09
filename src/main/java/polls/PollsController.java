@@ -56,13 +56,11 @@ public class PollsController {
 	@RequestMapping("/getPollWithStats")
 	public Poll getPollWithStatsHandler(Authentication auth, @RequestParam("id") String id) {
 		Optional<Poll> optPoll = pollsRepository.findById(id);
-		if (!optPoll.isPresent())
-		{
+		if (!optPoll.isPresent()) {
 			return null;
 		}
 		Poll poll = optPoll.get();
-		if (!poll.getAuthor().equals(auth.getName()))
-		{
+		if (!poll.getAuthor().equals(auth.getName())) {
 			return null;
 		}
 		return poll;
