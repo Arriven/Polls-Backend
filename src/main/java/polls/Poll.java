@@ -9,10 +9,12 @@ public class Poll {
 	private String id;
 
 	private final String name;
+	private final String author;
 	private List<Question> questions = new ArrayList<Question>();
 
-	public Poll(String name) {
+	public Poll(String name, String author) {
 		this.name = name;
+		this.author = author;
 	}
 
 	public void addQuestion(Question q) {
@@ -25,6 +27,10 @@ public class Poll {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getAuthor() {
+		return author;
 	}
 
 	public List<Question> getQuestions() {

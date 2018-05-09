@@ -1,8 +1,9 @@
 package polls;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,10 +22,10 @@ public class PollsController {
 	private AnswersRepository answersRepository;
 
 	@RequestMapping("/testInit")
-	public void init() {
+	public void init(Authentication auth) {
 		pollsRepository.deleteAll();
 
-		Poll poll = new Poll("test poll");
+		Poll poll = new Poll("test poll", auth.getName());
 		Question q = new Question("test question");
 		Answer a = new Answer("a");
 		answersRepository.save(a);
@@ -43,17 +44,27 @@ public class PollsController {
 	}
 
 	@RequestMapping("/getPoll")
-	public Poll getPollHandler() {
-		return pollsRepository.findByName("test poll");
+	public Poll getPollHandler(@RequestParam("id") String id) {
+		return pollsRepository.findById(id).orElse(null);
 	}
 
 	@RequestMapping("/getMyPollsList")
-	public List getMyPollsListHandler() {
-		return new ArrayList<String>();
+	public List getMyPollsListHandler(Authentication auth) {
+		return pollsRepository.findByAuthor(auth.getName());
 	}
 
 	@RequestMapping("/getPollWithStats")
-	public Poll getPollWithStatsHandler() {
-		return pollsRepository.findByName("test poll");
+	public Poll getPollWithStatsHandler(Authentication auth, @RequestParam("id") String id) {
+		Optional<Poll> optPoll = pollsRepository.findById(id);
+		if (!optPoll.isPresent())
+		{
+			return null;
+		}
+		Poll poll = optPoll.get();
+		if (poll.getAuthor() != auth.getName())
+		{
+			return null;
+		}
+		return poll;
 	}
 }
