@@ -1,14 +1,14 @@
 package polls;
 
-import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.data.annotation.Id;
 
 public class Answer {
-	private static AtomicLong counter = new AtomicLong();
-	private final long id;
-	private String text;
+	@Id
+	private String id;
+
+	private final String text;
 
 	public Answer(String text) {
-		this.id = counter.incrementAndGet();
 		this.text = text;
 	}
 
@@ -16,7 +16,7 @@ public class Answer {
 		return text;
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 }

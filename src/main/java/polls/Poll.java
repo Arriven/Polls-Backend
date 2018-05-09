@@ -2,25 +2,35 @@ package polls;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
+import org.springframework.data.annotation.Id;
 
 public class Poll {
-	private static AtomicLong counter = new AtomicLong();
-	private List<Question> questions = new ArrayList<Question>();
-	private final long id;
-	private final String name;
+	@Id
+	private String id;
 
-	public Poll(String name) {
-		this.id = counter.incrementAndGet();
+	private final String name;
+	private final String author;
+	private List<Question> questions = new ArrayList<Question>();
+
+	public Poll(String name, String author) {
 		this.name = name;
+		this.author = author;
 	}
 
 	public void addQuestion(Question q) {
 		questions.add(q);
 	}
 
-	public long getId() {
+	public String getId() {
 		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getAuthor() {
+		return author;
 	}
 
 	public List<Question> getQuestions() {
