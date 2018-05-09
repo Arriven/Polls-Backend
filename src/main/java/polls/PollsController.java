@@ -6,27 +6,45 @@ import java.util.ArrayList;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @RestController
 public class PollsController {
 
-	private Poll poll = new Poll("test poll");
+	@Autowired
+	private PollsRepository pollsRepository;
 
-	public PollsController() {
+	@Autowired
+	private QuestionsRepository questionsRepository;
+
+	@Autowired
+	private AnswersRepository answersRepository;
+
+	@RequestMapping("/testInit")
+	public void init() {
+		pollsRepository.deleteAll();
+
+		Poll poll = new Poll("test poll");
 		Question q = new Question("test question");
-		q.addAnswer(new Answer("a"));
-		q.addAnswer(new Answer("b"));
+		Answer a = new Answer("a");
+		answersRepository.save(a);
+		Answer b = new Answer("b");
+		answersRepository.save(b);
+		q.addAnswer(a);
+		q.addAnswer(b);
+		questionsRepository.save(q);
 		poll.addQuestion(q);
+		pollsRepository.save(poll);
 	}
 
 	@RequestMapping("/getPollsList")
 	public List getPollsListHandler() {
-		return new ArrayList<String>();
+		return pollsRepository.findAll();
 	}
 
 	@RequestMapping("/getPoll")
 	public Poll getPollHandler() {
-		return poll;
+		return pollsRepository.findByName("test poll");
 	}
 
 	@RequestMapping("/getMyPollsList")
@@ -36,6 +54,6 @@ public class PollsController {
 
 	@RequestMapping("/getPollWithStats")
 	public Poll getPollWithStatsHandler() {
-		return poll;
+		return pollsRepository.findByName("test poll");
 	}
 }
