@@ -17,7 +17,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/getPoll", "/getPollsList").permitAll()
+				.antMatchers("/getPoll", "/getPollsList", "/result").permitAll()
 				.anyRequest().authenticated()
 			.and()
 				.httpBasic()
