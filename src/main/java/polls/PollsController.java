@@ -29,14 +29,14 @@ public class PollsController {
 		Poll poll = new Poll("test poll", auth.getName());
 		Question q = new Question("test question");
 		Answer a = new Answer("a");
-		answersRepository.save(a);
+		answersRepository.insert(a);
 		Answer b = new Answer("b");
-		answersRepository.save(b);
+		answersRepository.insert(b);
 		q.addAnswer(a);
 		q.addAnswer(b);
-		questionsRepository.save(q);
+		questionsRepository.insert(q);
 		poll.addQuestion(q);
-		pollsRepository.save(poll);
+		pollsRepository.insert(poll);
 	}
 
 	@RequestMapping("/getPollsList")
@@ -71,13 +71,13 @@ public class PollsController {
 	public Poll createPollHandler(Authentication auth, @RequestBody Poll poll) {
 		Poll newPoll = new Poll(poll.getName(), auth.getName());
 		for (Question q : poll.getQuestions()) {
-			questionsRepository.save(q);
+			questionsRepository.insert(q);
 			for (Answer a : q.getAnswers()) {
-				answersRepository.save(a);
+				answersRepository.insert(a);
 			}
 			newPoll.addQuestion(q);
 		}
-		pollsRepository.save(newPoll);
+		pollsRepository.insert(newPoll);
 		return newPoll;
 	}
 }
