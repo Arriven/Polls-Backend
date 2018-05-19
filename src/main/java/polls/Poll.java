@@ -36,6 +36,10 @@ public class Poll {
 		return author;
 	}
 
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	public List<Question> getQuestions() {
 		return questions;
 	}

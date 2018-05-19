@@ -69,15 +69,14 @@ public class PollsController {
 
 	@RequestMapping("/createPoll")
 	public Poll createPollHandler(Authentication auth, @RequestBody Poll poll) {
-		Poll newPoll = new Poll(poll.getName(), auth.getName());
 		for (Question q : poll.getQuestions()) {
-			questionsRepository.insert(q);
 			for (Answer a : q.getAnswers()) {
 				answersRepository.insert(a);
 			}
-			newPoll.addQuestion(q);
+			questionsRepository.insert(q);
 		}
-		pollsRepository.insert(newPoll);
-		return newPoll;
+		poll.setAuthor(auth.getName());
+		pollsRepository.insert(poll);
+		return poll;
 	}
 }
