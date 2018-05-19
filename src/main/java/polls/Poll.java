@@ -8,9 +8,12 @@ public class Poll {
 	@Id
 	private String id;
 
-	private final String name;
-	private final String author;
+	private String name;
+	private String author;
 	private List<Question> questions = new ArrayList<Question>();
+
+	public Poll(){
+	}//for jackson deserialization only
 
 	public Poll(String name, String author) {
 		this.name = name;

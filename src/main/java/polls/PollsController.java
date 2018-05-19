@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -64,5 +65,19 @@ public class PollsController {
 			return null;
 		}
 		return poll;
+	}
+
+	@RequestMapping("/createPoll")
+	public Poll createPollHandler(Authentication auth, @RequestBody Poll poll) {
+		Poll newPoll = new Poll(poll.getName(), auth.getName());
+		for (Question q : poll.getQuestions()) {
+			questionsRepository.save(q);
+			for (Answer a : q.getAnswers()) {
+				answersRepository.save(a);
+			}
+			newPoll.addQuestion(q);
+		}
+		pollsRepository.save(newPoll);
+		return newPoll;
 	}
 }

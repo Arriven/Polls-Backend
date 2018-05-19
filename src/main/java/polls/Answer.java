@@ -6,7 +6,10 @@ public class Answer {
 	@Id
 	private String id;
 
-	private final String text;
+	private String text;
+
+	public Answer(){
+	}//for jackson deserialization only
 
 	public Answer(String text) {
 		this.text = text;

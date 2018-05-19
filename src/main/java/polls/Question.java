@@ -8,8 +8,11 @@ public class Question {
 	@Id
 	private String id;
 
-	private final String text;
+	private String text;
 	private List<Answer> answers = new ArrayList<Answer>();
+
+	public Question() {
+	}//for jackson deserialization only
 
 	public Question(String text) {
 		this.text = text;
