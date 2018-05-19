@@ -19,14 +19,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/getPoll", "/getPollsList").permitAll()
 				.anyRequest().authenticated()
-				.and()
-			.formLogin()
-				.permitAll()
-				.and()
-			.logout()
-				.permitAll()
-				.and()
-			.csrf().disable();
+			.and()
+				.httpBasic()
+			.and()
+				.csrf().disable();
 	}
 
 	@Bean
