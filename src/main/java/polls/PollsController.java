@@ -1,6 +1,7 @@
 package polls;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,9 @@ public class PollsController {
 
 	@Autowired
 	private AnswersRepository answersRepository;
+
+	@Autowired
+	private StatsRepository statsRepository;
 
 	@RequestMapping("/testInit")
 	public void init(Authentication auth) {
@@ -64,6 +68,14 @@ public class PollsController {
 		if (!poll.getAuthor().equals(auth.getName())) {
 			return null;
 		}
+		Stat pollStat = statsRepository.findById(poll.getId()).orElse(new Stat());
+		poll.setCount(pollStat.getCount());
+		for (Question q : poll.getQuestions()) {
+			for (Answer answer : q.getAnswers()) {
+				Stat answerStat = statsRepository.findById(answer.getId()).orElse(new Stat());
+				answer.setCount(answerStat.getCount());
+			}
+		}
 		return poll;
 	}
 
@@ -78,5 +90,29 @@ public class PollsController {
 		poll.setAuthor(auth.getName());
 		pollsRepository.insert(poll);
 		return poll;
+	}
+
+	@RequestMapping("/result")
+	public void resultHandler(@RequestBody Result result) {
+		List<Stat> statsToSave = new ArrayList<Stat>();
+		if (!pollsRepository.findById(result.getPollId()).isPresent()) {
+			return;
+		}
+		Stat pollStat = statsRepository.findById(result.getPollId())
+				.orElse(new Stat(result.getPollId()));
+		statsToSave.add(pollStat);
+		for (String answerId : result.getAnswerIds()) {
+			if (!answersRepository.findById(answerId).isPresent()) {
+				return;
+			}
+			Stat answerStat = statsRepository.findById(answerId)
+					.orElse(new Stat(answerId));
+			statsToSave.add(answerStat);
+		}
+
+		for (Stat stat : statsToSave) {
+			stat.incCount();
+			statsRepository.save(stat);
+		}
 	}
 }
