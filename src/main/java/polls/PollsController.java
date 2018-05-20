@@ -29,6 +29,9 @@ public class PollsController {
 	@RequestMapping("/testInit")
 	public void init(Authentication auth) {
 		pollsRepository.deleteAll();
+		questionsRepository.deleteAll();
+		answersRepository.deleteAll();
+		statsRepository.deleteAll();
 
 		Poll poll = new Poll("test poll", auth.getName());
 		Question q = new Question("test question");
