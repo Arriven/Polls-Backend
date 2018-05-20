@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories()
 public class MongoConfig extends AbstractMongoConfiguration {
     @Bean(name = "mongoClient")
-    public MongoClient mongo() throws UnknownHostException {
+    public MongoClient mongo() throws Exception {
         String connection = "mongodb://heroku_temp_test_user:temp_password@ds119820.mlab.com:19820/heroku_90t758ft";
         return new MongoClient(new MongoClientURI(connection));
     }
