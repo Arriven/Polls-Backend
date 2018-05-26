@@ -3,6 +3,9 @@ package polls;
 import java.util.List;
 import java.util.ArrayList;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 public class Question {
 	@Id
@@ -10,6 +13,9 @@ public class Question {
 
 	private String text;
 	private List<Answer> answers = new ArrayList<Answer>();
+	@Transient
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private String selectedAnswer;
 
 	public Question() {
 	}//for jackson deserialization only
@@ -32,5 +38,9 @@ public class Question {
 
 	public String getId() {
 		return id;
+	}
+
+	public String getSelectedAnswer() {
+		return selectedAnswer;
 	}
 }
