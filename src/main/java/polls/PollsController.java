@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,8 +54,12 @@ public class PollsController {
 	}
 
 	@RequestMapping("/getPoll")
-	public Poll getPollHandler(@RequestParam("id") String id) {
-		return pollsRepository.findById(id).orElse(null);
+	public ResponseEntity<Poll> getPollHandler(@RequestParam("id") String id) {
+		Optional<Poll> result = pollsRepository.findById(id);
+		if (!result.isPresent()) {
+			return new ResponseEntity<Poll>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Poll>(result.get(), HttpStatus.OK);
 	}
 
 	@RequestMapping("/getMyPollsList")
@@ -62,14 +68,14 @@ public class PollsController {
 	}
 
 	@RequestMapping("/getPollWithStats")
-	public Poll getPollWithStatsHandler(Authentication auth, @RequestParam("id") String id) {
+	public ResponseEntity<Poll> getPollWithStatsHandler(Authentication auth, @RequestParam("id") String id) {
 		Optional<Poll> optPoll = pollsRepository.findById(id);
 		if (!optPoll.isPresent()) {
-			return null;
+			return new ResponseEntity<Poll>(HttpStatus.NOT_FOUND);
 		}
 		Poll poll = optPoll.get();
 		if (!poll.getAuthor().equals(auth.getName())) {
-			return null;
+			return new ResponseEntity<Poll>(HttpStatus.FORBIDDEN);
 		}
 		Stat pollStat = statsRepository.findById(poll.getId()).orElse(new Stat());
 		poll.setCount(pollStat.getCount());
@@ -79,7 +85,7 @@ public class PollsController {
 				answer.setCount(answerStat.getCount());
 			}
 		}
-		return poll;
+		return new ResponseEntity<Poll>(poll, HttpStatus.OK);
 	}
 
 	@RequestMapping("/createPoll")
