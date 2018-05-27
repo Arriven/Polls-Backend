@@ -96,15 +96,16 @@ public class PollsController {
 	}
 
 	@RequestMapping("/result")
-	public void resultHandler(@RequestBody Result result) {
+	public void resultHandler(@RequestBody Poll result) {
 		List<Stat> statsToSave = new ArrayList<Stat>();
-		if (!pollsRepository.findById(result.getPollId()).isPresent()) {
+		if (!pollsRepository.findById(result.getId()).isPresent()) {
 			return;
 		}
-		Stat pollStat = statsRepository.findById(result.getPollId())
-				.orElse(new Stat(result.getPollId()));
+		Stat pollStat = statsRepository.findById(result.getId())
+				.orElse(new Stat(result.getId()));
 		statsToSave.add(pollStat);
-		for (String answerId : result.getAnswerIds()) {
+		for (Question q : result.getQuestions()) {
+			String answerId = q.getSelectedAnswer();
 			if (!answersRepository.findById(answerId).isPresent()) {
 				return;
 			}
